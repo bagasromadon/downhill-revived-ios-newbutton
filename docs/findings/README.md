@@ -188,21 +188,24 @@ out of date). New findings: copy `TEMPLATE.md` to the next free number on the la
 | 155 | [The Android build for every arm64 core (ARMv8.0)](155-android-armv8-baseline.md) | current |  |
 | 156 | [Where a frame's time goes, before replacing the VU1 and GS emulation](156-profile-vu1-gs.md) | current |  |
 | 157 | [Keyboard and controller rebinding, in the launcher and in the game](157-control-rebinding.md) | current |  |
-| 158 | [race frames over Cloudflare Realtime SFU, and puppets with less delay](158-online-sfu-transport.md) | partly superseded | [177](177-sfu-room-sessions.md) for the per-race Realtime sessions set up at the race's start, and TURN credentials per racer per race |
+| 158 | [race frames over Cloudflare Realtime SFU, and puppets with less delay](158-online-sfu-transport.md) | current |  |
 | 159 | [Touch controls gone after loading a career save](159-touch-gone-after-save-load.md) | current |  |
 | 160 | [Garbage blocks on screen in the first seconds after start](160-boot-garbage-frames.md) | current |  |
 | 161 | [online abuse guard: kill switch, rate limits, bans and a short moderation log](161-online-abuse-guard.md) | current |  |
 | 163 | [REVIVED SETTINGS: tabs, a clearer Controls page, online name size](163-revived-settings.md) | current |  |
 | 165 | [no port patch in code the port does not compile](165-dead-patch-guard.md) | current |  |
 | 166 | [Online races on the tracks without a split-screen level (Salt City MX and TD)](166-online-more-tracks.md) | current |  |
-| 169 | [online riders closer to now: bundled snapshots, 60 a second, shared clock, prediction](169-online-latency-round2.md) | current |  |
-| 170 | [PowerVR GE8320 phones close at start](170-powervr-ge8320-crash.md) | current |  |
-| 171 | [The picture freezes when the GPU device is lost](171-gpu-device-lost.md) | current |  |
-| 173 | [STATE snapshots that stop for seconds on the SFU, then arrive at once](173-sfu-snapshot-stalls.md) | current |  |
-| 175 | [online follow-ups after 0.7.12 (rejoin in a race, setup that never takes a race down, T...](175-online-followups.md) | partly superseded | [177](177-sfu-room-sessions.md) for the rejoin's SFU session restart: `sfu_restart` and the welcome's `race.sfu`; per-race sessions |
-| 177 | [one Realtime session per member per room, set up before the race](177-sfu-room-sessions.md) | current |  |
-| 178 | [pre-release online lifecycle review](178-pre-0713-review.md) | partly superseded | [179](179-sfu-review-risks.md) for the three risks left open, now fixed |
-| 179 | [the three SFU risks the pre-release review left open](179-sfu-review-risks.md) | current |  |
+| 167 | [Native iOS Port (iPhone 17 Pro Max / ARM64, v0.7.7)](167-ios-port.md) | partly superseded | [176](176-ios-0712-analog-input.md) for 0.7.12 integration and analog input |
+| 168 | [iOS performance review](168-ios-performance-review.md) | partly superseded | [176](176-ios-0712-analog-input.md) for 0.7.12 integration and analog input |
+| 169 | [iOS stability review 2](169-ios-stability-review.md) | partly superseded | [176](176-ios-0712-analog-input.md) for 0.7.12 integration and analog input |
+| 170 | [iOS external display and immediate touch input](170-ios-tv-touch-refinements.md) | partly superseded | [176](176-ios-0712-analog-input.md) for 0.7.12 integration and analog input |
+| 171 | [iOS widescreen, TV cadence and live graphics](171-ios-wide-tv-live-graphics.md) | partly superseded | [176](176-ios-0712-analog-input.md) for 0.7.12 integration and analog input |
+| 172 | [iOS integration with v0.7.8](172-ios-upstream-078.md) | partly superseded | [176](176-ios-0712-analog-input.md) for 0.7.12 integration and analog input |
+| 173 | [Localização da interface iOS](173-ios-localization.md) | partly superseded | [176](176-ios-0712-analog-input.md) for 0.7.12 integration and analog input |
+| 174 | [iOS startup, touch controls and the inventory exit](174-ios-start-menu-and-wide-exit.md) | partly superseded | [176](176-ios-0712-analog-input.md) for 0.7.12 integration and analog input |
+| 175 | [iOS 0.7.9 and external launcher](175-ios-upstream-079-airplay.md) | partly superseded | [176](176-ios-0712-analog-input.md) for 0.7.12 integration and analog input |
+| 176 | [iOS 0.7.12 and progressive analog input](176-ios-0712-analog-input.md) | partly superseded | [177](177-ios-control-editor.md) for native controls UI and deadzone defaults |
+| 177 | [native iOS control placement and button bindings](177-ios-control-editor.md) | current |  |
 | 075 | no file: the portable-core plan was numbered 075 on its branch and merged as 081 | renumbered | see 081 |
 | 113 | no file: the delta-time clock work was numbered 113 on its branch; the mixer's VBLANK time is in 139 | renumbered | see 139 |
 <!-- index:end -->
