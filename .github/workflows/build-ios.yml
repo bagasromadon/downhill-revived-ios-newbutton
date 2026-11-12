@@ -1,0 +1,81 @@
+# Builds an UNSIGNED Downhill Revived IPA on a GitHub macOS runner.
+# Use in a PRIVATE repository only: it needs your own game executable (see ci/README below).
+name: build-ios
+
+on:
+  workflow_dispatch:
+
+jobs:
+  ipa:
+    runs-on: macos-15
+    timeout-minutes: 300
+    env:
+      DHD_DEVCACHES: ${{ github.workspace }}/../DevCaches
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Show Xcode and SDK
+        run: |
+          xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-path
+
+      - name: Install build tools
+        run: |
+          brew install xcodegen wabt cmake ninja llvm
+          rustup target add aarch64-apple-ios
+
+      - name: Install wasi-sdk 34 and SIMDe
+        run: |
+          mkdir -p "$DHD_DEVCACHES/wasi-sdk"
+          curl -fsSL -o /tmp/wasi.tar.gz \
+            https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-34/wasi-sdk-34.0-arm64-macos.tar.gz
+          tar -xzf /tmp/wasi.tar.gz -C "$DHD_DEVCACHES/wasi-sdk"
+          ls "$DHD_DEVCACHES/wasi-sdk"
+          git clone --depth 1 https://github.com/simd-everywhere/simde "$DHD_DEVCACHES/simde-src"
+
+      - name: Python dependencies
+        run: python3 -m pip install -r requirements.txt
+
+      - name: Decrypt your game executable
+        env:
+          EXE_PASSWORD: ${{ secrets.EXE_PASSWORD }}
+        run: |
+          mkdir -p iso
+          openssl enc -d -aes-256-cbc -pbkdf2 -md sha256 -in ci/exe.enc -out iso/SCUS_971.77 -pass env:EXE_PASSWORD
+          echo "4e25a222ad8a475b5d26c2e928e90b5f2b7075eb  iso/SCUS_971.77" | shasum -a 1 -c -
+
+      - name: Generate derived assets
+        run: python3 tools/split.py
+
+      - name: Build unsigned IPA
+        env:
+          WABT_DIR: /opt/homebrew/opt/wabt
+          WASI_SYSROOT: ${{ github.workspace }}/../DevCaches/wasi-sdk/wasi-sdk-34.0-arm64-macos/share/wasi-sysroot
+          SIMDE_DIR: ${{ github.workspace }}/../DevCaches/simde-src
+        run: |
+          export PATH="/opt/homebrew/opt/llvm/bin:/opt/homebrew/opt/wabt/bin:$PATH"
+          python3 port/ios/build_ios.py --release --jobs 3 --unsigned
+
+      - name: Checksum
+        run: shasum -a 256 build/ios/DownhillRevived.ipa
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DownhillRevived-unsigned-ipa
+          path: build/ios/DownhillRevived.ipa
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: |
+            build/**/*.log
+            build/check/**
+          if-no-files-found: ignore
