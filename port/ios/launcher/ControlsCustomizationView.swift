@@ -187,7 +187,7 @@ private struct TouchLayoutEditorView: View {
                         .disabled(!(histories[orientation]?.canRedo ?? false))
                 }
                 .font(.caption)
-                adjustment("Size", value: valueBinding(index, \.scale), range: 0.6...1.5)
+                adjustment("Size", value: valueBinding(index, \.scale), range: 0.6...5.0)
                 Text("Drag to move. Rotate the device to edit the other orientation.")
                     .font(.caption2).foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)

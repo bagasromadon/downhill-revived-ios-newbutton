@@ -173,6 +173,38 @@ struct TouchControlSurface: View {
     }
 }
 
+/// The player's own button images (assets/touch-controls/skin_*.png), loaded once.
+enum TouchSkin {
+    private static var cache: [String: UIImage] = [:]
+
+    static func image(_ name: String) -> UIImage? {
+        if let hit = cache[name] { return hit }
+        guard let path = Bundle.main.path(forResource: "skin_" + name, ofType: "png"),
+              let image = UIImage(contentsOfFile: path) else { return nil }
+        cache[name] = image
+        return image
+    }
+
+    /// The image for what a control does (its action), nil where the skin has none.
+    static func name(for action: TouchLayoutSlot) -> String? {
+        switch action {
+        case .cross: return "cross"
+        case .circle: return "circle"
+        case .square: return "square"
+        case .triangle: return "triangle"
+        case .l1: return "l1"
+        case .l2: return "l2"
+        case .l3: return "l3"
+        case .r1: return "r1"
+        case .r2: return "r2"
+        case .r3: return "r3"
+        case .start: return "start"
+        case .select: return "select"
+        default: return nil
+        }
+    }
+}
+
 struct TouchControlArtwork: View {
     let placement: TouchControlPlacement
     let xbox: Bool
@@ -181,7 +213,28 @@ struct TouchControlArtwork: View {
 
     var body: some View {
         GeometryReader { geo in
-            if placement.slot == .stick {
+            if placement.slot == .stick, let base = TouchSkin.image("analog_base"),
+               let nub = TouchSkin.image("analog_stick") {
+                // The nub is 71% of the base; keep it inside the base as it travels.
+                let nubSize = min(geo.size.width, geo.size.height) * 0.71
+                let travel = (min(geo.size.width, geo.size.height) - nubSize) / 2
+                let reach = max(1, min(geo.size.width, geo.size.height) * 0.35)
+                let gain = min(1, travel / reach)
+                ZStack {
+                    Image(uiImage: base).resizable().scaledToFit()
+                    Image(uiImage: nub).resizable().scaledToFit()
+                        .frame(width: nubSize, height: nubSize)
+                        .offset(x: offset.width * gain, y: offset.height * gain)
+                        .brightness(pressed ? 0.15 : 0)
+                }
+                .frame(width: geo.size.width, height: geo.size.height)
+            } else if placement.slot != .stick, let name = TouchSkin.name(for: placement.action),
+                      let image = TouchSkin.image(name) {
+                Image(uiImage: image).resizable().scaledToFit()
+                    .frame(width: geo.size.width, height: geo.size.height)
+                    .scaleEffect(pressed ? 0.92 : 1)
+                    .brightness(pressed ? -0.18 : 0)
+            } else if placement.slot == .stick {
                 Circle().fill(Color.black.opacity(0.45))
                     .overlay(Circle().stroke(Color.white.opacity(0.4), lineWidth: 2))
                     .overlay {

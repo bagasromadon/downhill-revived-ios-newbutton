@@ -51,8 +51,10 @@ struct TouchControlPlacement: Codable, Identifiable, Equatable {
         let factor = CGFloat(scale) * fit
         switch slot {
         case .stick: return CGSize(width: 130 * factor, height: 130 * factor)
-        case .l1, .l2, .r1, .r2: return CGSize(width: 66 * factor, height: 38 * factor)
-        case .select, .start, .menu: return CGSize(width: 76 * factor, height: 34 * factor)
+        case .l1, .l2, .r1, .r2: return CGSize(width: 46 * factor, height: 51 * factor)
+        case .select, .start: return CGSize(width: 76 * factor, height: 42 * factor)
+        case .menu: return CGSize(width: 76 * factor, height: 34 * factor)
+        case .cross, .circle, .square, .triangle: return CGSize(width: 50 * factor, height: 55 * factor)
         default: return CGSize(width: 50 * factor, height: 50 * factor)
         }
     }
@@ -149,7 +151,7 @@ struct TouchLayout: Codable, Equatable {
                 slot: fallback.slot,
                 x: saved.x.isFinite ? min(1, max(0, saved.x)) : fallback.x,
                 y: saved.y.isFinite ? min(1, max(0, saved.y)) : fallback.y,
-                scale: saved.scale.isFinite ? min(1.5, max(0.6, saved.scale)) : 1,
+                scale: saved.scale.isFinite ? min(5, max(0.6, saved.scale)) : 1,
                 visible: saved.visible, action: fallback.slot.isButton && saved.action.isButton ? saved.action : fallback.action
             )
         }
